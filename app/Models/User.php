@@ -20,6 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
+        'consented_at',
+
     ];
 
     public function events(){

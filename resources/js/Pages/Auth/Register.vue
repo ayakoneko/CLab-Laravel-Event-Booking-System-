@@ -11,6 +11,7 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+    privacy: false,
 });
 
 const submit = () => {
@@ -90,6 +91,16 @@ const submit = () => {
                     class="mt-2"
                     :message="form.errors.password_confirmation"
                 />
+            </div>
+
+            <div class="mt-4">
+                <label>
+                    <input type="checkbox" v-model="form.privacy" class="mt-1 rounded border-gray-300"/>
+                    <span class="text-sm text-gray-700">I agree to the Privacy Policy</span>
+                </label>
+                <div v-if="form.errors.privacy" class="mt-1 text-sm text-red-600">
+                    {{ form.errors.privacy }}
+                </div>
             </div>
 
             <div class="mt-4 flex items-center justify-end">
