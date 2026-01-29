@@ -22,7 +22,7 @@ defineProps({
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mb-2" :title="event.title">{{ event.title }}</h5>
                         <div class="small text-muted">
-                            <div>{{ event.starts_at }}</div>
+                            <div>{{ event.starts_at_formatted }}</div>
                             <div>{{ event.location }}</div>
                         </div>
 

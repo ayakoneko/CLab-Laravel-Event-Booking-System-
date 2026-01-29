@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -23,6 +24,25 @@ class Event extends Model
         'ends_at' => 'datetime',
         'is_online' => 'boolean'
     ];
+
+    protected $appends = [
+        'starts_at_formatted',
+        'ends_at_formatted',
+    ];
+
+    public function getStartsAtFormattedAttribute()
+    {
+        return $this->starts_at
+            ? Carbon::parse($this->starts_at)->format('D, j M Y g:ia')
+            : null;
+    }
+
+    public function getEndsAtFormattedAttribute()
+    {
+        return $this->ends_at
+            ? Carbon::parse($this->ends_at)->format('D, j M Y g:ia')
+            : null;
+    }
 
     public function organiser() {
         return $this -> belongsTo(User::class, 'organiser_id');
