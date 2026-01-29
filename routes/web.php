@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
