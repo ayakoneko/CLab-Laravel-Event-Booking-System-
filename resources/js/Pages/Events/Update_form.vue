@@ -1,19 +1,52 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 
+// const form = useForm({
+//     title: '',
+//     description: '',
+//     starts_at: '',
+//     ends_at: '',
+//     is_online: false,
+//     online_url: '',
+//     capacity: '',
+//     price_cents: 0,
+//     image_path: '',
+// });
+
+const props = defineProps({
+    event: Object,
+})
+// form.title = props.event.title || ''
+// form.description = props.event.description || ''
+// form.starts_at = props.event.starts_at || ''
+// form.ends_at = props.event.ends_at || ''
+// form.is_online = props.event.is_online || false
+// form.location = props.event.location || ''
+// form.online_url = props.event.online_url || ''
+// form.capacity = props.event.capacity || ''
+// form.price_cents = props.event.price_cents || 0
+// form.image_path = props.event.image_path || ''
+
 const form = useForm({
-    title: '',
-    description: '',
-    starts_at: '',
-    ends_at: '',
-    is_online: false,
-    location: '',
-    online_url: '',
-    capacity: '',
-    price_cents: 0,
-    image_path: '',
-    organiser: '',
-});
+    title: props.event.title || '',
+    description: props.event.description || '',
+    starts_at: formatDate(props.event.starts_at),
+    ends_at: formatDate(props.event.ends_at),
+    is_online: props.event.is_online || false,
+    location: props.event.location || '',
+    online_url: props.event.online_url || '',
+    capacity: props.event.capacity || '',
+    price_cents: props.event.price_cents || 0,
+    image_path: props.event.image_path || '',
+})
+
+function formatDate(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().slice(0, 16); // Slice to match 'YYYY-MM-DDTHH:mm'
+}
+
+console.log(props.event);
 
 </script>
 
@@ -22,7 +55,7 @@ const form = useForm({
     <div class="container d-flex justify-content-center">
         <div class="card w-50 shadow-sm">
             <div class="card-body">
-                <h2 class="card-title mb-4 text-center">Create Event</h2>
+                <h2 class="card-title mb-4 text-center">Update Event</h2>
 
                 <!-- Display Form Errors -->
                 <div v-if="Object.keys(form.errors).length > 0" class="alert alert-danger">
@@ -32,7 +65,7 @@ const form = useForm({
                 </div>
 
                 <!-- Form -->
-                <form @submit.prevent="form.post(route('events.store'))">
+                <form @submit.prevent="form.put(route('events.update', props.event))">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
                         <input v-model="form.title" type="text" name="title" class="form-control" maxlength="100" required/>
@@ -82,12 +115,12 @@ const form = useForm({
 
                     <div class="mb-3">
                         <label for="image_path" class="form-label">Event Image (if applicable)</label>
-                        <input v-model="form.image_path" type="text" name="image_path" class="form-control" maxlength="2048"/>
+                        <input v-model="form.image_path" type="text" name="image_path"  class="form-control" maxlength="2048"/>
                     </div>
 
                     <!-- Submit button -->
                     <div class="mt-3 text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Update Event</button>
                     </div>
                 </form>
 

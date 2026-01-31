@@ -40,8 +40,13 @@ defineProps({
                         </div>
 
                         <div class="mb-2">
-                            <strong>Organizer:</strong> {{ event.organiser?.name }}
+                            <strong>Organiser:</strong> {{ event.organiser?.name }}
                         </div>
+
+                        <div class="d-flex gap-2 justify-content-end mb-3">
+                            <Link :href="route('events.edit', event)" class="btn btn-sm btn-primary"> Edit </Link>
+                        </div>
+
                     </div>
                 </div>
             </div>

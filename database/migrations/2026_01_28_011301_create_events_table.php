@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('image_path', 255)->nullable();
             $table->timestamps();
 
-            $table->foreignId('organiser_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('organiser_id')->nullable()->constrained('users')->cascadeOnDelete();
 
             $table->index('starts_at');
             $table->index(['organiser_id', 'starts_at']);
