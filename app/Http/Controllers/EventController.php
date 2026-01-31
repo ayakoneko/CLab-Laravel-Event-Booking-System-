@@ -72,7 +72,9 @@ class EventController extends Controller
     public function show(Event $event)
     {
         return Inertia::render('Events/Show', [
-            'event' => $event,
+            'event' => $event->load('organiser'),
+            'auth_user_type' => Auth::user()->type,
+            'auth_user_id' => Auth::id(),
         ]);
     }
 
@@ -82,7 +84,7 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         //creator-only
-        // abort_unless($event->organiser_id === Auth::id(), 403);
+        abort_unless($event->organiser_id === Auth::id(), 403);
 
         return Inertia::render('Events/Update_form', [
             'event' => $event,
@@ -127,7 +129,7 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //creator only
-        // abort_unless($event->organiser_id === Auth::id(), 403);
+        abort_unless($event->organiser_id === Auth::id(), 403);
 
         $event->delete();
         return redirect()->route('events.index')->with('success', 'Event deleted successfully.');

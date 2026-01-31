@@ -5,6 +5,8 @@ import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     event: Object,
+    auth_user_type: String,
+    auth_user_id: Number,
 })
 
 const form = useForm({
@@ -66,7 +68,7 @@ const handleDelete = () => {
                             <strong>Organiser:</strong> {{ event.organiser?.name }}
                         </div>
 
-                        <div class="d-flex gap-2 justify-content-end mb-3">
+                        <div v-if="auth_user_type === 'organiser' && auth_user_id === props.event.organiser_id" class="d-flex gap-2 justify-content-end mb-3">
                             <Link :href="route('events.edit', event)" class="btn btn-sm btn-primary"> Edit </Link>
                             <button @click="handleDelete" type="button" class="btn btn-sm btn-outline-danger"> Delete </button>
                         </div>

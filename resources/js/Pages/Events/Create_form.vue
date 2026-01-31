@@ -12,7 +12,7 @@ const form = useForm({
     capacity: '',
     price_cents: 0,
     image_path: '',
-    organiser: '',
+    organiser_id: '',
 });
 
 </script>
