@@ -2,11 +2,16 @@
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue'
 
 const props = defineProps({
     event: Object,
     auth_user_type: String,
     auth_user_id: Number,
+})
+
+defineOptions({
+    layout: AppLayout,
 })
 
 const form = useForm({
@@ -32,12 +37,19 @@ const handleDelete = () => {
 </script>
 
 <template>
-    <div class="container py-4">
-        <Link :href="route('events.index')" class="btn btn-link px-0 mb-3">
-            &larr; Back to Events List
-        </Link>
+    <div class="min-h-screen bg-gray-100">
+        <!-- Page Heading -->
+        <header class="bg-white shadow">
+            <div class="container py-6 px-4 sm:px-6 lg:px-8">
+                <Link :href="route('events.index')" class="btn btn-link px-0 mb-0">
+                    &larr; Back to Events
+                </Link>
+            </div>
+        </header>
 
-        <div class="card">
+        <!-- Page Content -->
+        <main class="container py-4">
+            <div class="card">
             <img v-if="event.image_path" :src="`/${event.image_path}`" :alt="event.title" class="event-detail-img" />
 
             <div class="card-body">
@@ -77,13 +89,14 @@ const handleDelete = () => {
                 </div>
             </div>
 
-            <template v-if="event.description && event.description.length">
-                <hr />
-                <div class="mt-2 px-4">
-                    <strong>Event Description:</strong><br />
-                    <p class="ms-4">{{ event.description }}</p>
-                </div>
-            </template>
-        </div>
+                <template v-if="event.description && event.description.length">
+                    <hr />
+                    <div class="mt-2 px-4">
+                        <strong>Event Description:</strong><br />
+                        <p class="ms-4">{{ event.description }}</p>
+                    </div>
+                </template>
+            </div>
+        </main>
     </div>
 </template>

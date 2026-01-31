@@ -1,8 +1,13 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue'
 
 const props = defineProps({
     event: Object,
+})
+
+defineOptions({
+    layout: AppLayout,
 })
 
 const form = useForm({

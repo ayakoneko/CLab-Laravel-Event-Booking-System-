@@ -1,5 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue'
 
 const form = useForm({
     title: '',
@@ -15,7 +16,9 @@ const form = useForm({
     organiser_id: '',
 });
 
-</script>
+defineOptions({
+    layout: AppLayout,
+})</script>
 
 
 <template>

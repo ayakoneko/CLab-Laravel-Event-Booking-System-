@@ -1,19 +1,29 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue'
 
 defineProps({
     events: Object,
 })
+
+defineOptions({
+    layout: AppLayout,
+})
 </script>
 
 <template>
-    <div class="container py-4">
-        <div class="d-flex align-item-center justify-content-between mb-3">
-            <h1 class="h4 mb-0">Upcoming Events</h1>
-        </div>
+    <div>
+        <!-- Page Heading -->
+        <header class="bg-white shadow">
+            <div class="container py-6 px-4 sm:px-6 lg:px-8">
+                <h1 class="h2 mb-0">Upcoming Events</h1>
+            </div>
+        </header>
 
-        <!-- Event List -->
-        <div v-if="events.data.length" class="row g-3">
+        <!-- Page Content -->
+        <main class="container py-4">
+            <!-- Event List -->
+            <div v-if="events.data.length" class="row g-3">
             <div v-for="event in events.data" :key="event.id" class="col-12 col-sm-6 col-lg-3">
                 <div class="card h-100 position-relative">
                     <img v-if="event.image_path" :src="`/${event.image_path}`" :alt="event.title" class="card-img-top event-list-img" />
@@ -32,14 +42,18 @@ defineProps({
             </div>
         </div>
 
-        <!-- Empty State -->
-        <p v-else class="text-gray-500">No Upcoming events</p>
+            <!-- Empty State -->
+            <p v-else class="text-muted text-center py-5">No upcoming events</p>
 
-        <!-- Pagination -->
-        <div>
-            <Link v-for="link in events.links" :key="link.label" :href="link.url ?? ''" v-html="link.label"
-                class="btn btn-sm" :class="{'btn-primary': link.active, 'btn-outline-secondary': !link.active, 'disabled': !link.url}"/>
-        </div>
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li v-for="link in events.links" :key="link.label" class="page-item" :class="{'active': link.active, 'disabled': !link.url}">
+                        <Link :href="link.url ?? '#'" class="page-link" v-html="link.label"/>
+                    </li>
+                </ul>
+            </nav>
+        </main>
     </div>
 </template>
 
