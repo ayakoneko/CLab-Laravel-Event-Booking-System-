@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use Inertia\Inertia;
 
@@ -25,7 +26,10 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        $event = new Event();
+        return Inertia::render('Events/Create_form', [
+            'event' => $event,
+        ]);
     }
 
     /**
@@ -33,7 +37,33 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:100',
+            'description' => 'nullable|string|max:1000',
+            'starts_at' => 'required|date|date_format:Y-m-d\TH:i|after:now',
+            'ends_at' => 'nullable|date|date_format:Y-m-d\TH:i|after_or_equal:starts_at',
+            'is_online' => 'required|boolean',
+            'location' => 'required_if:is_online,0|nullable|string|max:255',
+            'online_url' => 'required_if:is_online,1|nullable|url|max:255',
+            'capacity' => 'required|integer|min:1|max:1000',
+            'price_cents' => 'required|integer|min:0',
+            'image_path' => 'nullable|string|max:2048',
+        ],[
+            'starts_at.after'   => 'The start time must be in the future.',
+            'ends_at.after_or_equal' => 'The end time must be after the start time.',
+            'location.required_if'   => 'Location is required for in-person events.',
+            'online_url.required_if' => 'Online URL is required when the event is online.',
+        ]);
+
+        $validatedData['organiser_id'] = Auth::id();
+
+        if ($request->boolean('is_online')) {
+            $validatedData['location'] = 'Online';
+        }
+
+        $event = Event::create($validatedData);
+        return redirect()->route('events.show', $event)->with('success', 'Event created successfully.');
+
     }
 
     /**

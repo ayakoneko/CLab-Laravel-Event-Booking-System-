@@ -30,7 +30,8 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth', 'organiser'])->group(function(){
-    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::get('/event/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/event', [EventController::class, 'store'])->name('events.store');
 });
 
 Route::middleware(['auth', 'attendee'])->group(function(){

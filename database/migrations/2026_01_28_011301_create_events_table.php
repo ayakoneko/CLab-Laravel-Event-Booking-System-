@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime('ends_at')->nullable(); //must be equal or after starts_at
 
             $table->boolean('is_online')->default(0);
-            $table->string('location', 255);
+            $table->string('location', 255)->nullable();
             $table->string('online_url')->nullable();
 
             $table->unsignedSmallInteger('capacity');    //min 1, max 1000
