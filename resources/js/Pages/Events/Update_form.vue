@@ -1,31 +1,9 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 
-// const form = useForm({
-//     title: '',
-//     description: '',
-//     starts_at: '',
-//     ends_at: '',
-//     is_online: false,
-//     online_url: '',
-//     capacity: '',
-//     price_cents: 0,
-//     image_path: '',
-// });
-
 const props = defineProps({
     event: Object,
 })
-// form.title = props.event.title || ''
-// form.description = props.event.description || ''
-// form.starts_at = props.event.starts_at || ''
-// form.ends_at = props.event.ends_at || ''
-// form.is_online = props.event.is_online || false
-// form.location = props.event.location || ''
-// form.online_url = props.event.online_url || ''
-// form.capacity = props.event.capacity || ''
-// form.price_cents = props.event.price_cents || 0
-// form.image_path = props.event.image_path || ''
 
 const form = useForm({
     title: props.event.title || '',
@@ -43,7 +21,7 @@ const form = useForm({
 function formatDate(date) {
     if (!date) return '';
     const d = new Date(date);
-    return d.toISOString().slice(0, 16); // Slice to match 'YYYY-MM-DDTHH:mm'
+    return d.toISOString().slice(0, 16);
 }
 
 console.log(props.event);

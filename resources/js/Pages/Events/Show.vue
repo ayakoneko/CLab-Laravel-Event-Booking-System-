@@ -1,9 +1,32 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
+import { useForm } from '@inertiajs/vue3';
 
-defineProps({
+const props = defineProps({
     event: Object,
 })
+
+const form = useForm({
+    title: props.event.title,
+    description: props.event.description,
+    starts_at: props.event.starts_at,
+    ends_at: props.event.ends_at,
+    is_online: props.event.is_online,
+    location: props.event.location,
+    online_url: props.event.online_url,
+    capacity: props.event.capacity,
+    price_cents: props.event.price_cents,
+    image_path: props.event.image_path,
+});
+
+
+const handleDelete = () => {
+    if (confirm('Are you sure you want to delete this event? This cannot be undone.')) {
+        Inertia.delete(route('events.destroy', props.event));
+    }
+};
+
 </script>
 
 <template>
@@ -45,13 +68,14 @@ defineProps({
 
                         <div class="d-flex gap-2 justify-content-end mb-3">
                             <Link :href="route('events.edit', event)" class="btn btn-sm btn-primary"> Edit </Link>
+                            <button @click="handleDelete" type="button" class="btn btn-sm btn-outline-danger"> Delete </button>
                         </div>
 
                     </div>
                 </div>
             </div>
 
-            <template v-if="event.description">
+            <template v-if="event.description && event.description.length">
                 <hr />
                 <div class="mt-2 px-4">
                     <strong>Event Description:</strong><br />

@@ -124,8 +124,12 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Event $event)
     {
-        //
+        //creator only
+        // abort_unless($event->organiser_id === Auth::id(), 403);
+
+        $event->delete();
+        return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
     }
 }
