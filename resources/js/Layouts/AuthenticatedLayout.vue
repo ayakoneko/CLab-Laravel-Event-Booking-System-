@@ -14,8 +14,6 @@ const flash = computed(() => page.props.flash);
 
 const showingNavigationDropdown = ref(false);
 
-console.log(page.props.auth.user);
-console.log(page.props.auth.user.type);
 
 </script>
 
@@ -38,7 +36,7 @@ console.log(page.props.auth.user.type);
                                 </Link>
                             </div>
 
-                            <!-- Navigation Links for Authenticated User -->
+                            <!-- Navigation Links -->
                             <div class="flex items-center ml-3">
                                 <ul>
                                     <!-- Authenticated User Menu -->
@@ -75,72 +73,73 @@ console.log(page.props.auth.user.type);
                                     </template>
                                 </ul>
                             </div>
-                        </div>
 
-                        <div >
-                            <Link :href="route('login')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                                Log in
-                            </Link>
-
-                            <Link :href="route('register')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white ms-2">
-                                Register
-                            </Link>
-                        </div>
-
-                        <template>
-                            <div v-if="$page.props.auth.user">
-                                <!-- Show user info if logged in -->
-                                <div>
-                                    {{ $page.props.auth.user.name }} ({{ $page.props.auth.user.type }})
-                                </div>
-
-                                <div class="visible sm:ms-6 sm:flex sm:items-center">
-                                    <!-- Settings Dropdown / Login/Register -->
-                                    <div class="relative ms-3">
-                                        <!-- Only render this section if the user is logged in -->
-                                        <template v-if="$page.props.auth.user">
-                                            <Dropdown width="48">
-                                                <!-- Trigger section for the dropdown -->
-                                                <template #trigger>
-                                                    <span class="inline-flex rounded-md">
-                                                        <button
-                                                            type="button"
-                                                            class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
-
-                                                            <span>{{ $page.props.auth.user.name }}</span>
-                                                            <span class="ml-2 bg-white px-2 py-1.5 text-xs text-gray-400">
-                                                                ({{ $page.props.auth.user.type }})
-                                                            </span>
-                                                            <svg class="-me-0.5 ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                                            </svg>
-                                                        </button>
+                            <!-- Login/Register Info -->
+                            <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                                <!-- Settings Dropdown -->
+                                <div class="relative ms-3">
+                                    <Dropdown align="right" width="48">
+                                        <template #trigger>
+                                            <span class="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                >
+                                                    <div v-if="$page.props.auth.user">{{ $page.props.auth.user.name }}</div>
+                                                    <div v-else>Guest</div>
+                                                    <span v-if="$page.props.auth.user" class="ml=2  bg-white px-2 py-1.5 text-xs text-gray-400">
+                                                        ({{ $page.props.auth.user.type }})
                                                     </span>
-                                                </template>
 
-                                                <!-- Dropdown content -->
-                                                <template #content>
-                                                    <DropdownLink :href="route('profile.edit')">Profile</DropdownLink>
-                                                    <DropdownLink :href="route('logout')" method="post" as="button">Log Out</DropdownLink>
-                                                </template>
-                                            </Dropdown>
+                                                    <svg
+                                                        class="-me-0.5 ms-2 h-4 w-4"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fill-rule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clip-rule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </span>
                                         </template>
-                                    </div>
+
+                                        <template v-if="$page.props.auth.user" #content>
+                                            <DropdownLink
+                                                :href="route('profile.edit')"
+                                            >
+                                                Profile
+                                            </DropdownLink>
+                                            <DropdownLink
+                                                :href="route('logout')"
+                                                method="post"
+                                                as="button"
+                                            >
+                                                Log Out
+                                            </DropdownLink>
+                                        </template>
+
+                                        <template v-else #content>
+                                            <DropdownLink
+                                                :href="route('login')"
+                                            >
+                                                Log in
+                                            </DropdownLink>
+                                            <DropdownLink
+                                                :href="route('register')"
+                                            >
+                                                Register
+                                            </DropdownLink>
+                                        </template>
+
+                                    </Dropdown>
                                 </div>
                             </div>
 
-                            <!-- If the user is not logged in, show login/register links -->
-                            <template v-else>
-                                <Link :href="route('login')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                                    Log in
-                                </Link>
-
-                                <Link :href="route('register')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white ms-2">
-                                    Register
-                                </Link>
-                            </template>
-                        </template>
-
+                        </div>
 
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
