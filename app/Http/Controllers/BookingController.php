@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Booking;
+use App\Models\Event;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -13,9 +15,15 @@ class BookingController extends Controller
      */
     public function index(Request $request )
     {
+        $user = $request->user();
+
+        $bookings = Booking::where('user_id', $user->id)
+                ->with('event')
+                ->orderBy(Event::select('starts_at')->whereColumn('events.id', 'bookings.event_id'))
+                ->get();
+
         return Inertia::render('Bookings/Index', [
-            'bookings' => Booking::where('user_id', $request->user_id)
-                ->get(),
+            'bookings' => $bookings,
         ]);
     }
 
@@ -30,9 +38,18 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Event $event)
     {
-        //
+        $user = $request->user();
+
+        Booking::create([
+            'event_id' => $event -> id,
+            'user_id' => $user -> id,
+            'status' => 'confirmed',
+            'ticket_code' => Str::upper(Str::random(8)),
+        ]);
+
+        return redirect()->route('bookings.index', $event)->with('success', 'Booking confirmed successfully.');
     }
 
     /**

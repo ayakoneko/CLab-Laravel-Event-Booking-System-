@@ -83,6 +83,10 @@ const handleDelete = () => {
                             <button @click="handleDelete" type="button" class="btn btn-sm btn-outline-danger"> Delete </button>
                         </div>
 
+                        <div v-if="$page.props.auth.user.type === 'attendee'" class="d-flex gap-2 justify-content-end mb-3">
+                            <Link :href="route('events.book', event)" class="btn btn-sm btn-primary"> Book </Link>
+                        </div>
+
                     </div>
                 </div>
             </div>
