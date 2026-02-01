@@ -1,13 +1,24 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+
+// Get flash messages from server
+const flash = computed(() => page.props.flash);
+
+// Get user details
+const user = computed(() => page.props.auth?.user);
+const isOrganiser = computed(() => user.value?.type === 'organiser');
+const isAttendee = computed(() => user.value?.type === 'attendee');
 
 const showingNavigationDropdown = ref(false);
+
 </script>
 
 <template>
@@ -21,24 +32,52 @@ const showingNavigationDropdown = ref(false);
                     <div class="flex h-16 justify-between">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
+                            <div class="flex shrink-0 items-center ">
+                                <Link :href="route('events.index')">
+                                    <img src="/images/logo.png" alt="Logo" width="20" height="20" class="me-2">
+                                    EventBooking
+                                    <!-- <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
-                                    />
+                                    /> -->
                                 </Link>
                             </div>
 
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
+                            <!-- Navigation Links for Authenticated User -->
+                            <div>
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <!-- Authenticated User Menu -->
+                                    <template v-if="user.value && user.value.type">
+                                        <!-- Organizer Menu -->
+                                        <template v-if="isOrganiser.value">
+                                            <NavLink :href="route('events.create')" :active="route().current('events.create')" class="nav-link">
+                                                Create Event
+                                            </NavLink>
+                                            <NavLink :href="route('organiser.dashboard')" :active="route().current('organiser.dashboard')" class="nav-link">
+                                                Event Dashboard
+                                            </NavLink>
+                                        </template>
+
+                                        <!-- Attendee Menu -->
+                                        <template v-if="isAttendee.value">
+                                            <NavLink :href="route('bookings.index')" :active="route().current('bookings.index')" class="nav-link">
+                                                My Bookings
+                                            </NavLink>
+                                            <NavLink :href="route('waitlists.index')" :active="route().current('waitlists.index')" class="nav-link">
+                                                My Waitlists
+                                            </NavLink>
+                                        </template>
+                                    </template>
+
+                                    <!-- Guest Menu -->
+                                    <template v-else>
+                                        <NavLink :href="route('events.create')" class="nav-link">
+                                            Create Event
+                                        </NavLink>
+                                        <NavLink :href="route('bookings.index')" class="nav-link">
+                                            My Bookings
+                                        </NavLink>
+                                    </template>
+                                </ul>
                             </div>
                         </div>
 

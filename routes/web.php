@@ -35,10 +35,13 @@ Route::middleware(['auth', 'organiser'])->group(function(){
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->whereNumber('event')->name('events.edit');
     Route::put('/events/{event}', [EventController::class, 'update'])->whereNumber('event')->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->whereNumber('event')->name('events.destroy');
+
+    Route::get('/organiser/dashboard', [EventController::class, 'create'])->name('organiser.dashboard');
 });
 
 Route::middleware(['auth', 'attendee'])->group(function(){
     Route::get('/my-bookings', [EventController::class, 'index'])->name('bookings.index');
+    Route::get('/my-waitlists', [EventController::class, 'index'])->name('waitlists.index');
 });
 
 require __DIR__.'/auth.php';

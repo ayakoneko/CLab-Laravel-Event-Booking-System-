@@ -7,10 +7,19 @@ const page = usePage();
 // Get flash messages from server
 const flash = computed(() => page.props.flash);
 
-// Get user details
+// Get auth user from the correct path
 const user = computed(() => page.props.auth?.user);
+
+// Check user type
 const isOrganiser = computed(() => user.value?.type === 'organiser');
 const isAttendee = computed(() => user.value?.type === 'attendee');
+
+// Debug logs
+console.log('page.props.auth:', page.props.auth);
+console.log('user:', user.value);
+console.log('user.type:', user.value?.type);
+console.log('isOrganiser:', isOrganiser.value);
+console.log('isAttendee:', isAttendee.value);
 
 </script>
 
@@ -30,7 +39,6 @@ const isAttendee = computed(() => user.value?.type === 'attendee');
                     EventBooking
                 </Link>
 
-                <!-- Left side: Navigation Links for Authenticated User -->
                 <div>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <!-- Authenticated User Menu -->
