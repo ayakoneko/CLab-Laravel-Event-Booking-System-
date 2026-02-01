@@ -54,4 +54,16 @@ class Event extends Model
         return $this -> hasMany(Waitlist::class)->orderBy('position');
     }
 
+    public function confirmedBookings() {
+        return $this->bookings()->where('status', 'confirmed');
+    }
+
+    public function isFull(): bool {
+        return $this->confirmedBookings()->count() >= (int)$this->capacity;
+    }
+
+    public function userHasConfirmedBooking(?int $userId): bool {
+        if (!$userId) return false;
+        return $this->confirmedBookings()->where('user_id', $userId)->exists();
+    }
 }

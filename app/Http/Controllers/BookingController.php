@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use App\Models\Booking;
 use App\Models\Event;
 use Inertia\Inertia;
@@ -41,6 +42,19 @@ class BookingController extends Controller
     public function store(Request $request, Event $event)
     {
         $user = $request->user();
+        $user_id = $user -> id;
+
+        // Validation Check (Duplicate/Capacity)
+        // $request->validate([
+        //     $user_id => [
+        //         Rule::unique('bookings')
+        //             ->where(fn($query) => $query->where('event_id', $event->id)->where('status', 'confirmed')),
+        //     ],
+        // ], ['user_id.unique' => 'You already booked this event.']);
+
+        // if ($event->isFull()) {
+        //     return back()->withErrors(['capacity' => 'Sorry, this event is full.']);
+        // }
 
         Booking::create([
             'event_id' => $event -> id,

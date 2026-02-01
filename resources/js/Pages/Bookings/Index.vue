@@ -1,10 +1,13 @@
 <script setup>
+import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 defineProps({
     bookings: Object,
 })
+
+const { errors } = usePage()
 
 defineOptions({
     layout: AuthenticatedLayout,
@@ -19,6 +22,13 @@ defineOptions({
                 <h1 class="h2 mb-0">Upcoming Events</h1>
             </div>
         </header>
+
+        <!-- Error Message -->
+        <div v-if="Object.keys(errors).length > 0" class="alert alert-danger">
+            <ul>
+                <li v-for="(message, field) in errors" :key="field">{{ message[0] }}</li>
+            </ul>
+        </div>
 
         <!-- Page Content -->
         <main class="container py-4">
