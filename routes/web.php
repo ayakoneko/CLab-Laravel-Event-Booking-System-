@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,8 @@ Route::middleware(['auth', 'organiser'])->group(function(){
 
 // Attendee Routes
 Route::middleware(['auth', 'attendee'])->group(function(){
-    Route::get('/my-bookings', [EventController::class, 'index'])->name('bookings.index');
+    Route::get('/events/{event}/book', [BookingController::class, 'store'])->name('events.book');
+    Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/my-waitlists', [EventController::class, 'index'])->name('waitlists.index');
 });
 
