@@ -15,9 +15,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/events', [EventController::class, 'index'])->name('events.index');
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -28,7 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Public Routes for Event List and Event Details
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
+// Organiser Routes
 Route::middleware(['auth', 'organiser'])->group(function(){
     Route::get('/event/create', [EventController::class, 'create'])->name('events.create');
     Route::post('/event', [EventController::class, 'store'])->name('events.store');
@@ -39,6 +40,7 @@ Route::middleware(['auth', 'organiser'])->group(function(){
     Route::get('/organiser/dashboard', [EventController::class, 'create'])->name('organiser.dashboard');
 });
 
+// Attendee Routes
 Route::middleware(['auth', 'attendee'])->group(function(){
     Route::get('/my-bookings', [EventController::class, 'index'])->name('bookings.index');
     Route::get('/my-waitlists', [EventController::class, 'index'])->name('waitlists.index');

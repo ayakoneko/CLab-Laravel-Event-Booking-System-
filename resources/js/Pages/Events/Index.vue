@@ -1,13 +1,13 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 defineProps({
     events: Object,
 })
 
 defineOptions({
-    layout: AppLayout,
+    layout: AuthenticatedLayout,
 })
 </script>
 

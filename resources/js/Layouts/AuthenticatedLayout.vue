@@ -12,28 +12,24 @@ const page = usePage();
 // Get flash messages from server
 const flash = computed(() => page.props.flash);
 
-// Get user details
-const user = computed(() => page.props.auth?.user);
-const isOrganiser = computed(() => user.value?.type === 'organiser');
-const isAttendee = computed(() => user.value?.type === 'attendee');
-
 const showingNavigationDropdown = ref(false);
+
+console.log(page.props.auth.user);
+console.log(page.props.auth.user.type);
 
 </script>
 
 <template>
     <div>
         <div class="min-h-screen bg-gray-100">
-            <nav
-                class="border-b border-gray-100 bg-white"
-            >
+            <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
-                        <div class="flex">
+                        <div class="d-flex align-items-center">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center ">
-                                <Link :href="route('events.index')">
+                                <Link :href="route('events.index')" class="d-flex align-items-center me-4">
                                     <img src="/images/logo.png" alt="Logo" width="20" height="20" class="me-2">
                                     EventBooking
                                     <!-- <ApplicationLogo
@@ -43,26 +39,26 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Navigation Links for Authenticated User -->
-                            <div>
-                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <div class="flex items-center ml-3">
+                                <ul>
                                     <!-- Authenticated User Menu -->
-                                    <template v-if="user.value && user.value.type">
+                                    <template v-if="$page.props.auth.user">
                                         <!-- Organizer Menu -->
-                                        <template v-if="isOrganiser.value">
-                                            <NavLink :href="route('events.create')" :active="route().current('events.create')" class="nav-link">
+                                        <template v-if="$page.props.auth.user.type === 'organiser'">
+                                            <NavLink :href="route('events.create')" :active="route().current('events.create')">
                                                 Create Event
                                             </NavLink>
-                                            <NavLink :href="route('organiser.dashboard')" :active="route().current('organiser.dashboard')" class="nav-link">
+                                            <NavLink :href="route('organiser.dashboard')" :active="route().current('organiser.dashboard')">
                                                 Event Dashboard
                                             </NavLink>
                                         </template>
 
                                         <!-- Attendee Menu -->
-                                        <template v-if="isAttendee.value">
-                                            <NavLink :href="route('bookings.index')" :active="route().current('bookings.index')" class="nav-link">
+                                        <template v-else-if="$page.props.auth.user.type === 'attendee'">
+                                            <NavLink :href="route('bookings.index')" :active="route().current('bookings.index')" >
                                                 My Bookings
                                             </NavLink>
-                                            <NavLink :href="route('waitlists.index')" :active="route().current('waitlists.index')" class="nav-link">
+                                            <NavLink :href="route('waitlists.index')" :active="route().current('waitlists.index')" >
                                                 My Waitlists
                                             </NavLink>
                                         </template>
@@ -70,10 +66,10 @@ const showingNavigationDropdown = ref(false);
 
                                     <!-- Guest Menu -->
                                     <template v-else>
-                                        <NavLink :href="route('events.create')" class="nav-link">
+                                        <NavLink :href="route('events.create')" >
                                             Create Event
                                         </NavLink>
-                                        <NavLink :href="route('bookings.index')" class="nav-link">
+                                        <NavLink :href="route('bookings.index')" >
                                             My Bookings
                                         </NavLink>
                                     </template>
@@ -81,54 +77,70 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {{ $page.props.auth.user.name }}
-                                                <span class="ml=2  bg-white px-2 py-1.5 text-xs text-gray-400">
-                                                    ({{ $page.props.auth.user.type }})
-                                                </span>
+                        <div >
+                            <Link :href="route('login')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                                Log in
+                            </Link>
 
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
-                                            Profile
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('logout')"
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
+                            <Link :href="route('register')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white ms-2">
+                                Register
+                            </Link>
                         </div>
+
+                        <template>
+                            <div v-if="$page.props.auth.user">
+                                <!-- Show user info if logged in -->
+                                <div>
+                                    {{ $page.props.auth.user.name }} ({{ $page.props.auth.user.type }})
+                                </div>
+
+                                <div class="visible sm:ms-6 sm:flex sm:items-center">
+                                    <!-- Settings Dropdown / Login/Register -->
+                                    <div class="relative ms-3">
+                                        <!-- Only render this section if the user is logged in -->
+                                        <template v-if="$page.props.auth.user">
+                                            <Dropdown width="48">
+                                                <!-- Trigger section for the dropdown -->
+                                                <template #trigger>
+                                                    <span class="inline-flex rounded-md">
+                                                        <button
+                                                            type="button"
+                                                            class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+
+                                                            <span>{{ $page.props.auth.user.name }}</span>
+                                                            <span class="ml-2 bg-white px-2 py-1.5 text-xs text-gray-400">
+                                                                ({{ $page.props.auth.user.type }})
+                                                            </span>
+                                                            <svg class="-me-0.5 ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                            </svg>
+                                                        </button>
+                                                    </span>
+                                                </template>
+
+                                                <!-- Dropdown content -->
+                                                <template #content>
+                                                    <DropdownLink :href="route('profile.edit')">Profile</DropdownLink>
+                                                    <DropdownLink :href="route('logout')" method="post" as="button">Log Out</DropdownLink>
+                                                </template>
+                                            </Dropdown>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- If the user is not logged in, show login/register links -->
+                            <template v-else>
+                                <Link :href="route('login')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                                    Log in
+                                </Link>
+
+                                <Link :href="route('register')" class="rounded-md px-3 py-2 text-black/70 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white ms-2">
+                                    Register
+                                </Link>
+                            </template>
+                        </template>
+
 
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
@@ -174,7 +186,7 @@ const showingNavigationDropdown = ref(false);
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div
+                <!-- <div
                     :class="{
                         block: showingNavigationDropdown,
                         hidden: !showingNavigationDropdown,
@@ -188,10 +200,10 @@ const showingNavigationDropdown = ref(false);
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                    </div>
+                    </div> -->
 
                     <!-- Responsive Settings Options -->
-                    <div
+                    <!-- <div
                         class="border-t border-gray-200 pb-1 pt-4"
                     >
                         <div class="px-4">
@@ -218,7 +230,7 @@ const showingNavigationDropdown = ref(false);
                             </ResponsiveNavLink>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </nav>
 
             <!-- Page Heading -->

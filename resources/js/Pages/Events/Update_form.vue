@@ -1,13 +1,13 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const props = defineProps({
     event: Object,
 })
 
 defineOptions({
-    layout: AppLayout,
+    layout: AuthenticatedLayout,
 })
 
 const form = useForm({

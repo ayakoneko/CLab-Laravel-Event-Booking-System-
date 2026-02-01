@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const form = useForm({
     title: '',
@@ -17,8 +17,9 @@ const form = useForm({
 });
 
 defineOptions({
-    layout: AppLayout,
-})</script>
+    layout: AuthenticatedLayout,
+})
+</script>
 
 
 <template>

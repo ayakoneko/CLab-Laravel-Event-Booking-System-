@@ -73,8 +73,6 @@ class EventController extends Controller
     {
         return Inertia::render('Events/Show', [
             'event' => $event->load('organiser'),
-            'auth_user_type' => Auth::user()->type,
-            'auth_user_id' => Auth::id(),
         ]);
     }
 
