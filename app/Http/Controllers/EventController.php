@@ -71,8 +71,15 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+
+        $user = Auth::user();
+        $booking = $event->confirmedBookings()->where('user_id', $user->id)->first();
+        $event->isFull = $event->isFull();
+
         return Inertia::render('Events/Show', [
             'event' => $event->load('organiser'),
+            'booking' => $booking,
+            'userHasConfirmedBooking' => $event->userHasConfirmedBooking($user->id),
         ]);
     }
 

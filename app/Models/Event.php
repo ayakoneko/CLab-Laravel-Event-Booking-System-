@@ -58,11 +58,20 @@ class Event extends Model
         return $this->bookings()->where('status', 'confirmed');
     }
 
+    public function cancelledBookings() {
+        return $this->bookings()->where('status', 'cancelled');
+    }
+
     public function isFull(): bool {
         return $this->confirmedBookings()->count() >= (int)$this->capacity;
     }
 
-    public function userHasConfirmedBooking(?int $userId): bool {
+    public function remainingCapacity(): int {
+        return max(0, ($this->capacity ?? 0) - $this->confirmedBookings()->count());
+    }
+
+    public function userHasConfirmedBooking(?int $userId): bool
+    {
         if (!$userId) return false;
         return $this->confirmedBookings()->where('user_id', $userId)->exists();
     }

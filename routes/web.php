@@ -43,8 +43,9 @@ Route::middleware(['auth', 'organiser'])->group(function(){
 
 // Attendee Routes
 Route::middleware(['auth', 'attendee'])->group(function(){
-    Route::get('/events/{event}/book', [BookingController::class, 'store'])->name('events.book');
     Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/events/{event}/book', [BookingController::class, 'store'])->name('events.book');
+    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
     Route::get('/my-waitlists', [EventController::class, 'index'])->name('waitlists.index');
 });
 

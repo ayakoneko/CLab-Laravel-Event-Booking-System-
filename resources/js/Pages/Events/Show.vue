@@ -2,11 +2,13 @@
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
-const props = defineProps({
-    event: Object,
-})
+const { props } = usePage();
+const event = props.event;
+const userHasConfirmedBooking = props.userHasConfirmedBooking;
+const booking = props.booking;
 
 defineOptions({
     layout: AuthenticatedLayout,
@@ -31,6 +33,22 @@ const handleDelete = () => {
         Inertia.delete(route('events.destroy', props.event));
     }
 };
+
+const handleCancel = (event) => {
+    event.preventDefault(); // Prevent default action (like form submission or page refresh)
+
+    console.log("Cancel button clicked"); // Debug log to check if the function is triggered
+
+    if (confirm('Are you sure you want to cancel this event? This cannot be undone.')) {
+        console.log("Sending DELETE request to cancel booking", booking.id); // Check if booking.id is available
+
+        if (booking && booking.id) {
+            // Perform the DELETE request using Inertia.js
+            Inertia.delete(route('bookings.destroy', { booking: booking.id }));
+        }
+    }
+};
+
 
 </script>
 
@@ -84,7 +102,17 @@ const handleDelete = () => {
                         </div>
 
                         <div v-if="$page.props.auth.user.type === 'attendee'" class="d-flex gap-2 justify-content-end mb-3">
-                            <Link :href="route('events.book', event)" class="btn btn-sm btn-primary"> Book </Link>
+                            <div v-if="userHasConfirmedBooking">
+                                <button @click="handleCancel" type="button" class="btn btn-sm btn-outline-danger">Cancel</button>
+                            </div>
+
+                            <div v-if="event.isFull">
+                                <button class="btn btn-secondary disabled" disabled>NA - Event Full</button>
+                            </div>
+
+                            <div v-else>
+                                <Link :href="route('events.book', event)" class="btn btn-sm btn-primary">Book</Link>
+                            </div>
                         </div>
 
                     </div>

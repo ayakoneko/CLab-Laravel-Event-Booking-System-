@@ -24,7 +24,7 @@ defineOptions({
         </header>
 
         <!-- Error Message -->
-        <div v-if="Object.keys(errors).length > 0" class="alert alert-danger">
+        <div v-if="errors && Object.keys(errors).length > 0" class="alert alert-danger">
             <ul>
                 <li v-for="(message, field) in errors" :key="field">{{ message[0] }}</li>
             </ul>
