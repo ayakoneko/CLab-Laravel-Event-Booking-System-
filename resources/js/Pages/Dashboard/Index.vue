@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const { reports, user } = usePage().props;
+console.log(reports);
 
 defineOptions({
     layout: AuthenticatedLayout,
@@ -21,7 +22,7 @@ Inertia.on('navigate', (event) => {
     <div>
         <header class="bg-white shadow">
             <div class="container py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="h2 mb-0">Organiser Dashboard - ({{ compileToFunction($report) }}) events</h1>
+                <h1 class="h2 mb-0">Organiser Dashboard - ({{ reports.length }} events)</h1>
             </div>
         </header>
 
@@ -40,12 +41,12 @@ Inertia.on('navigate', (event) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="booking in bookings" :key="booking.id">
-                                <td><Link :href="route('events.show', { event: booking.event.id })" class="card-title mb-2" :title="booking.event.title">{{ booking.event.title }}</Link></td>
-                                <td>{{ booking.event.starts_at_formatted}}</td>
-                                <td>{{ booking.event.capacity }}</td>
-                                <td>{{ booking.event.hasconfirmed().count() }}</td>
-                                <td>{{ booking.event.hasremaining().count() }}</td>
+                            <tr v-for="report in reports" :key="report.id">
+                                <td><Link :href="route('events.show', { event: report.id })" class="card-title mb-2" :title="report.title">{{ report.title }}</Link></td>
+                                <td>{{ report.starts_at }}</td>
+                                <td>{{ report.capacity }}</td>
+                                <td>{{ report.booking }}</td>
+                                <td>{{ report.remaining }}</td>
                             </tr>
                         </tbody>
                     </table>
