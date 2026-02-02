@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const { props } = usePage();
@@ -34,20 +35,21 @@ const handleDelete = () => {
     }
 };
 
-const handleCancel = (event) => {
-    event.preventDefault(); // Prevent default action (like form submission or page refresh)
+const handleCancel = (e) => {
+    e.preventDefault()
 
-    console.log("Cancel button clicked"); // Debug log to check if the function is triggered
+    if (!booking?.id) return
 
-    if (confirm('Are you sure you want to cancel this event? This cannot be undone.')) {
-        console.log("Sending DELETE request to cancel booking", booking.id); // Check if booking.id is available
-
-        if (booking && booking.id) {
-            // Perform the DELETE request using Inertia.js
-            Inertia.delete(route('bookings.destroy', { booking: booking.id }));
-        }
+    if (confirm('Are you sure you want to cancel this event?')) {
+        router.delete(route('bookings.destroy', booking.id), {
+        preserveScroll: true,
+        onStart: () => console.log('Canceling booking...'),
+        onFinish: () => console.log('Finished (success or error)'),
+        onError: (errors) => console.log('Errors:', errors),
+        onSuccess: () => console.log('Cancelled!'),
+        })
     }
-};
+}
 
 
 </script>
@@ -103,6 +105,7 @@ const handleCancel = (event) => {
 
                         <div v-if="$page.props.auth.user.type === 'attendee'" class="d-flex gap-2 justify-content-end mb-3">
                             <div v-if="userHasConfirmedBooking">
+                                <button class="btn btn-secondary disabled" disabled>Already Booked</button>
                                 <button @click="handleCancel" type="button" class="btn btn-sm btn-outline-danger">Cancel</button>
                             </div>
 
@@ -110,7 +113,7 @@ const handleCancel = (event) => {
                                 <button class="btn btn-secondary disabled" disabled>NA - Event Full</button>
                             </div>
 
-                            <div v-else>
+                            <div v-if="!userHasConfirmedBooking && !event.isFull">
                                 <Link :href="route('events.book', event)" class="btn btn-sm btn-primary">Book</Link>
                             </div>
                         </div>
