@@ -30,7 +30,7 @@ defineOptions({
 
 
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title mb-2" :title="event.title">{{ event.title }}</h5>
+                        <h3 class="card-title mb-2 fw-bold text-bold" :title="event.title">{{ event.title }}</h3>
                         <div class="small text-muted">
                             <div>{{ event.starts_at_formatted }}</div>
                             <div>{{ event.location }}</div>

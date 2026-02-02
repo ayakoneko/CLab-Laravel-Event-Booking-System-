@@ -16,3 +16,7 @@
     max-height: 420px;
     object-fit: cover;
 }
+
+.text-bold{
+    font-weight: bold;
+}

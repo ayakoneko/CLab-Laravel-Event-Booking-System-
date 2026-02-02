@@ -20,21 +20,28 @@ Inertia.on('navigate', (event) => {
 
 <template>
     <div>
+        <!-- Page Heading -->
         <header class="bg-white shadow">
             <div class="container py-6 px-4 sm:px-6 lg:px-8">
                 <h1 class="h2 mb-0">Organiser Dashboard - ({{ reports.length }} events)</h1>
             </div>
         </header>
 
+        <div class="container py-6 px-4 sm:px-6 lg:px-8">
+            <Link :href="route('events.index')" class="btn btn-link px-0 mb-0">
+                &larr; Back to Events
+            </Link>
+        </div>
+
         <main class="container py-4">
             <!-- Event List -->
             <div v-if="reports.length" class="row g-3">
-                <div v-for="report in reports" :key="report.id" class="col-12 col-sm-6 col-lg-3">
-                    <table class="table table-striped mt-3">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <table class="table table-striped mt-3 text-center" style="table-layout: fixed; width: 1000px;">
                         <thead>
                             <tr>
-                                <th>Event Title</th>
-                                <th>Date (Start at) </th>
+                                <th style="width: 400px;">Event Title</th>
+                                <th style="width: 300px;">Date (Start at) </th>
                                 <th>Capacity</th>
                                 <th>Bookings</th>
                                 <th>Remaining</th>
