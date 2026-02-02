@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -37,8 +38,7 @@ Route::middleware(['auth', 'organiser'])->group(function(){
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->whereNumber('event')->name('events.edit');
     Route::put('/events/{event}', [EventController::class, 'update'])->whereNumber('event')->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->whereNumber('event')->name('events.destroy');
-
-    Route::get('/organiser/dashboard', [EventController::class, 'create'])->name('organiser.dashboard');
+    Route::get('/organiser/dashboard', [DashboardController::class, 'index'])->name('organiser.dashboard');
 });
 
 // Attendee Routes
